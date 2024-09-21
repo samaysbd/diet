@@ -38,6 +38,24 @@
             border-radius: 5px;
             cursor: pointer;
         }
+        input[type="text"] {
+            margin-top: 1rem;
+            padding: 0.5rem;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 80%;
+        }
+        button {
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            background-color: #00ff00;
+            color: #000000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
         #packageInfo {
             margin-top: 2rem;
             display: none;
@@ -80,12 +98,32 @@
             width: 150px;
             height: 150px;
         }
+        /* Updated rolling banner */
+        .rolling-banner {
+            background-color: #ffffff;
+            color: #ff0000;
+            padding: 1rem;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            text-align: center;
+            display: none;
+            animation: slideText 6s linear infinite;
+        }
+        @keyframes slideText {
+            from {transform: translateX(100%);}
+            to {transform: translateX(-100%);}
+        }
     </style>
 </head>
 <body>
+    <!-- Rolling banner -->
+    <div id="rollingBanner" class="rolling-banner">Use code SAMAY for extra discount</div>
+
     <div class="container">
         <h1>SAMAYSBD</h1>
-        <h2>Transform Yourself with Our Vegetarian Diet Plans</h2>
+        <h2>Lift Heavy, Eat Good</h2>
+        <h3>Transform Yourself with Our Vegetarian Diet Plans</h3>
         <p class="veg-info">All our diet plans are pure vegetarian</p>
         <select id="goalSelect" onchange="showPackage()">
             <option value="">Choose your package</option>
@@ -95,9 +133,15 @@
         <div id="packageInfo">
             <h3 id="packageTitle"></h3>
             <div class="price">
-                <span class="original-price">₹200</span>
-                <span class="current-price">₹149 only</span>
+                <span class="original-price">₹259</span>
+                <span id="discountedPrice" class="current-price">₹159 only</span>
             </div>
+            <input type="text" id="couponCode" placeholder="Enter coupon code" />
+            <button onclick="applyCoupon()">Apply Coupon</button>
+
+            <!-- New button for Instagram DM -->
+            <button id="dmButton" style="display: none;" onclick="openInstagramDM()">Send Required Details</button>
+
             <p>To get started, please reply with the following information:</p>
             <ul style="text-align: left;">
                 <li>Age</li>
@@ -117,7 +161,7 @@
                     <img src="/api/placeholder/24/24" alt="Gmail logo" /> samaysbd@gmail.com
                 </div>
                 <div class="contact-item">
-                    <img src="/api/placeholder/24/24" alt="Instagram logo" /> @samaysbd
+                    <img src=https://www.freepik.com/free-photos-vectors/instagram-logo-for-website/> @samaysbd
                 </div>
             </div>
             <div class="qr-code">
@@ -133,13 +177,51 @@
             const goal = document.getElementById('goalSelect').value;
             const packageInfo = document.getElementById('packageInfo');
             const packageTitle = document.getElementById('packageTitle');
+            const rollingBanner = document.getElementById('rollingBanner');
+            const dmButton = document.getElementById('dmButton');
             
             if (goal) {
                 packageTitle.textContent = goal + " Package";
                 packageInfo.style.display = 'block';
+                rollingBanner.style.display = 'block'; // Show the rolling banner when a package is selected
+                dmButton.style.display = 'block'; // Show the DM button after selecting a package
             } else {
                 packageInfo.style.display = 'none';
+                rollingBanner.style.display = 'none'; // Hide the banner if no package is selected
+                dmButton.style.display = 'none'; // Hide the DM button if no package is selected
             }
+        }
+
+        function applyCoupon() {
+            const couponCode = document.getElementById('couponCode').value;
+            const discountedPrice = document.getElementById('discountedPrice');
+
+            if (couponCode === 'SAMAY') {
+                discountedPrice.textContent = '₹149 only';
+            } else {
+                discountedPrice.textContent = '₹159 only';
+            }
+        }
+
+        function openInstagramDM() {
+            const goal = document.getElementById('goalSelect').value;
+            const message = encodeURIComponent(`
+                Hi, I am interested in the ${goal}.
+                Here are my details:
+                - Age: [Your Age]
+                - Gender: [Your Gender]
+                - Weight: [Your Weight]
+                - Height: [Your Height]
+                - Activity Level: [Your Activity Level]
+                - Medical conditions/allergies: [Any conditions]
+                - Dietary preferences: [Your preferences]
+                - Fitness goals: [Your goals]
+                - Current diet: [Your diet]
+                - Supplements: [Any supplements you're taking]
+            `);
+
+            // Open Instagram DM link for @samaysbd
+            window.open(`https://www.instagram.com/direct/new/samaysbd?message=${message}`);
         }
     </script>
 </body>
